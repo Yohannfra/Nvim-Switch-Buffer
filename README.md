@@ -25,3 +25,7 @@ Just add this line to your init.vim
 " Feel free to map the shortcut you want
 nnoremap S :SwitchBuffer <cr>
 ```
+
+## License
+
+This project is licensed under the terms of the MIT license.
