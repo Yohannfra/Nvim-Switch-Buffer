@@ -3,18 +3,23 @@
 " November 2019
 
 function! GetBufferList()
-    let nb_buffers = bufnr("$")
-    let all = range(1, nb_buffers)
+    let buffer_list = nvim_list_bufs()
+    let current_buffer = nvim_get_current_buf()
     let buffers = []
+    let index = 0
 
-    for i in all
+    for i in buffer_list
         if buflisted(i)
             if len(bufname(i)) > 0
                 call add(buffers, " [" . i . "] " . bufname(i))
             else
                 call add(buffers, " [" . i . "] " ."[No Name]")
             endif
+            if i == current_buffer
+                let buffers[index] = buffers[index] . '  <--'
+            endif
         endif
+        let index += 1
     endfor
     return buffers
 endfunction
@@ -45,13 +50,13 @@ function! OpenFloatingWin()
 
     let buf = nvim_create_buf(v:false, v:true)
     let win = nvim_open_win(buf, v:true, opts)
-
     call nvim_buf_set_lines(buf, 0, -1, 0, s:buffers)
 
     setlocal buftype=nofile nobuflisted nomodifiable bufhidden=hide
-                \ nonumber norelativenumber cursorline
+                \ nonumber cursorline
 
     nnoremap <buffer> S :bd<cr>
+    nnoremap <buffer> <esc> :q <cr>
     nnoremap <buffer> <cr> :call OpenBuffer('n') <cr>
     nnoremap <buffer> <space> :call OpenBuffer('n') <cr>
     nnoremap <buffer> v :call OpenBuffer('v') <cr>
@@ -59,6 +64,10 @@ function! OpenFloatingWin()
 endfunction
 
 function! SwitchBuffer()
+    if bufnr("$") == 1
+        echo "You only have this buffer"
+        return
+    endif
     let s:buffers = GetBufferList()
     call OpenFloatingWin()
 endfunction
