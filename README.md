@@ -4,7 +4,7 @@ Nvim-Switch-Buffer is a plugin to quickly switch beetween open buffers in neovim
 It uses the floating window feature of neovim
 
 Example: \
-![alt text](.github/gif.gif "Utilisation example")
+![alt text](.github/demo.gif "Utilisation example")
 
 ## Installation
 
