@@ -28,9 +28,9 @@ function! OpenBuffer(pos)
     if a:pos ==# 'n'
         execute ":b " . f
     elseif a:pos ==# 'v'
-        execute ":vsplit " . f
+        execute ":vertical sb " . f
     elseif a:pos ==# 's'
-        execute ":split " . f
+        execute ":sb " . f
     endif
     echo s:buffers[index - 1]
 endfunction

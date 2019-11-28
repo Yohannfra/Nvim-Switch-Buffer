@@ -26,6 +26,14 @@ Just add this line to your init.vim
 nnoremap S :SwitchBuffer <cr>
 ```
 
+## How to use
+
+- Navigate in the window using j/k or Up/Down
+- Press Enter or Space to open the buffer
+- Press s to open the buffer in a horizontal split
+- Press v to open the buffer in a vertical split
+- Press S or :q to close the window
+
 ## License
 
 This project is licensed under the terms of the MIT license.
