@@ -4,7 +4,7 @@
 
 function! GetBufferList()
     let buffer_list = nvim_list_bufs()
-    let current_buffer = nvim_get_current_buf()
+    let s:current_buffer = nvim_get_current_buf()
     let buffers = []
     let index = 0
 
@@ -15,8 +15,8 @@ function! GetBufferList()
             else
                 call add(buffers, " [" . i . "] " ."[No Name]")
             endif
-            if i == current_buffer
-                let buffers[index] = buffers[index] . '  <--'
+            if i == s:current_buffer
+                let buffers[index] = buffers[index] . '  <=='
             endif
         endif
         let index += 1
@@ -40,11 +40,15 @@ function! OpenBuffer(pos)
 endfunction
 
 function! OpenFloatingWin()
+    let y = len(s:buffers)
+    while y % 5 != 0
+        let y = y + 1
+    endwhile
     let opts = {'relative': 'editor',
                 \ 'row': 0,
                 \ 'col': (&columns / 2) - ((&columns / 2) / 2),
                 \ 'width': &columns / 2,
-                \ 'height': len(s:buffers)
+                \ 'height': y
                 \}
 
     let buf = nvim_create_buf(v:false, v:true)
@@ -52,11 +56,12 @@ function! OpenFloatingWin()
     call nvim_buf_set_lines(buf, 0, -1, 0, s:buffers)
 
     setlocal buftype=nofile nobuflisted nomodifiable bufhidden=hide
-                \ nonumber cursorline
+                \ nonumber cursorline cc=0
 
     for i in range(10)
         execute 'nnoremap <buffer>' . i . ' :'i . '<cr>'
     endfor
+    execute ":" . s:current_buffer
     nnoremap <buffer> S :bd<cr>
     nnoremap <buffer> <esc> :q <cr>
     nnoremap <buffer> <cr> :call OpenBuffer('n') <cr>
