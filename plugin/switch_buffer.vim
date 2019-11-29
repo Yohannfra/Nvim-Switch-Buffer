@@ -2,72 +2,86 @@
 " Assouline Yohann
 " November 2019
 
+let g:switch_buffer_shortcuts = {
+\    "S" : ":bd",
+\    "<esc>" : ":bd",
+\    "<cr>" : ":call OpenBuffer('n')",
+\    "<space>" : ":call OpenBuffer('n')",
+\    "v" : ":call OpenBuffer('v')",
+\    "s" : ":call OpenBuffer('s')",
+\    "dd" : "call CloseBuffer()"
+\}
+
 function! GetBufferList()
     let buffer_list = nvim_list_bufs()
-    let s:current_buffer = nvim_get_current_buf()
-    let buffers = []
-    let index = 0
+    let s:buffers = {}
 
-    for i in buffer_list
-        if buflisted(i)
-            if len(bufname(i)) > 0
-                call add(buffers, " [" . i . "] " . bufname(i))
+    for buf in buffer_list
+        if buflisted(buf)
+            if len(bufname(buf)) > 0
+                let s:buffers[buf] = bufname(buf)
             else
-                call add(buffers, " [" . i . "] " ."[No Name]")
-            endif
-            if i == s:current_buffer
-                let buffers[index] = buffers[index] . '  <=='
+                let s:buffers[buf]= "[No Name]"
             endif
         endif
-        let index += 1
     endfor
-    return buffers
 endfunction
 
 function! OpenBuffer(pos)
-    let index = getpos('.')[1]
-    let f = split(s:buffers[index - 1])
-    let f = f[0][1 : index(f, ']') - 1]
+    let index = keys(s:buffers)[getpos('.')[1] - 1]
 
     execute ":q"
     if a:pos ==# 'n'
-        execute ":b " . f
+        execute ":b " . index
     elseif a:pos ==# 'v'
-        execute ":vertical sb " . f
+        execute ":vertical sb " . index
     elseif a:pos ==# 's'
-        execute ":sb " . f
+        execute ":sb " . index
+    endif
+endfunction
+
+function! CloseBuffer()
+    let index = keys(s:buffers)[getpos('.')[1] - 1]
+
+    if len(s:buffers) > 1 && index != s:current_buffer
+        execute ":bd " . index . " | :q | :call SwitchBuffer()"
+    else
+        echo "You can't close your last or actual buffer"
     endif
 endfunction
 
 function! OpenFloatingWin()
-    let y = len(s:buffers)
-    while y % 5 != 0
-        let y = y + 1
-    endwhile
+    let len_buf = len(s:buffers)
     let opts = {'relative': 'editor',
                 \ 'row': 0,
                 \ 'col': (&columns / 2) - ((&columns / 2) / 2),
                 \ 'width': &columns / 2,
-                \ 'height': y
+                \ 'height': len_buf > 2 ? len_buf : len_buf + 1
                 \}
 
     let buf = nvim_create_buf(v:false, v:true)
     let win = nvim_open_win(buf, v:true, opts)
-    call nvim_buf_set_lines(buf, 0, -1, 0, s:buffers)
 
-    setlocal buftype=nofile nobuflisted nomodifiable bufhidden=hide
+    let i = 1
+    for key in keys(s:buffers)
+        if key == s:current_buffer
+            call setbufline(buf, i, "[" . key . "]  " .
+                        \s:buffers[key] . "\t\t<==")
+        else
+            call setbufline(buf, i, "[" . key . "]  " . s:buffers[key])
+        endif
+        let i += 1
+     endfor
+
+     setlocal buftype=nofile nobuflisted nomodifiable bufhidden=hide
                 \ nonumber cursorline cc=0
 
-    for i in range(10)
-        execute 'nnoremap <buffer>' . i . ' :'i . '<cr>'
+    execute ":" . (index(keys(s:buffers), "" . s:current_buffer) + 1)
+
+    for i in keys(g:switch_buffer_shortcuts)
+        execute 'nnoremap <buffer>' . i . ' ' .
+                    \g:switch_buffer_shortcuts[i] . "<cr>"
     endfor
-    execute ":" . s:current_buffer
-    nnoremap <buffer> S :bd<cr>
-    nnoremap <buffer> <esc> :q <cr>
-    nnoremap <buffer> <cr> :call OpenBuffer('n') <cr>
-    nnoremap <buffer> <space> :call OpenBuffer('n') <cr>
-    nnoremap <buffer> v :call OpenBuffer('v') <cr>
-    nnoremap <buffer> s :call OpenBuffer('s') <cr>
 endfunction
 
 function! SwitchBuffer()
@@ -75,7 +89,9 @@ function! SwitchBuffer()
         echo "You only have this buffer"
         return
     endif
-    let s:buffers = GetBufferList()
+
+    let s:current_buffer = nvim_get_current_buf()
+    call GetBufferList()
     call OpenFloatingWin()
 endfunction
 
