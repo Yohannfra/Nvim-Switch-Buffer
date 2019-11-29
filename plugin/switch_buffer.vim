@@ -37,7 +37,6 @@ function! OpenBuffer(pos)
     elseif a:pos ==# 's'
         execute ":sb " . f
     endif
-    echo s:buffers[index - 1]
 endfunction
 
 function! OpenFloatingWin()
