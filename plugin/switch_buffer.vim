@@ -55,6 +55,9 @@ function! OpenFloatingWin()
     setlocal buftype=nofile nobuflisted nomodifiable bufhidden=hide
                 \ nonumber cursorline
 
+    for i in range(10)
+        execute 'nnoremap <buffer>' . i . ' :'i . '<cr>'
+    endfor
     nnoremap <buffer> S :bd<cr>
     nnoremap <buffer> <esc> :q <cr>
     nnoremap <buffer> <cr> :call OpenBuffer('n') <cr>
@@ -72,4 +75,4 @@ function! SwitchBuffer()
     call OpenFloatingWin()
 endfunction
 
-command! SwitchBuffer execute SwitchBuffer()
+command! SwitchBuffer :call SwitchBuffer()
