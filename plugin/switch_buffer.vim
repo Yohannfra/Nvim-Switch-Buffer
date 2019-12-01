@@ -9,7 +9,7 @@ let g:switch_buffer_shortcuts = {
 \    "<space>" : ":call OpenBuffer('n')",
 \    "v" : ":call OpenBuffer('v')",
 \    "s" : ":call OpenBuffer('s')",
-\    "dd" : "call CloseBuffer()"
+\    "dd" : ":call CloseBuffer()"
 \}
 
 function! GetBufferList()
@@ -79,8 +79,7 @@ function! OpenFloatingWin()
     execute ":" . (index(keys(s:buffers), "" . s:current_buffer) + 1)
 
     for i in keys(g:switch_buffer_shortcuts)
-        execute 'nnoremap <buffer>' . i . ' ' .
-                    \g:switch_buffer_shortcuts[i] . "<cr>"
+        execute 'nnoremap <buffer>' . i . ' ' . g:switch_buffer_shortcuts[i] . "<cr>"
     endfor
 endfunction
 
