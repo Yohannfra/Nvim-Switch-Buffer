@@ -12,7 +12,7 @@ let g:switch_buffer_shortcuts = {
 \    "dd" : ":call CloseBuffer()"
 \}
 
-function! GetBufferList()
+function! s:GetBufferList()
     let buffer_list = nvim_list_bufs()
     let s:buffers = {}
 
@@ -27,12 +27,27 @@ function! GetBufferList()
     endfor
 endfunction
 
+function! s:BufIsOpen(buf_id)
+    let buflist = []
+    let id = str2nr(a:buf_id, 10)
+
+    for i in range(tabpagenr('$'))
+        call extend(buflist, tabpagebuflist(i + 1))
+    endfor
+    return index(buflist, id) >= 0
+endfunction
+
 function! OpenBuffer(pos)
     let index = keys(s:buffers)[getpos('.')[1] - 1]
+    let is_open = s:BufIsOpen(index)
 
     execute ":q"
     if a:pos ==# 'n'
-        execute ":b " . index
+        if is_open
+            execute ":sbuffer " . index
+        else
+            execute ":b " . index
+        endif
     elseif a:pos ==# 'v'
         execute ":vertical sb " . index
     elseif a:pos ==# 's'
@@ -50,7 +65,7 @@ function! CloseBuffer()
     endif
 endfunction
 
-function! OpenFloatingWin()
+function! s:OpenFloatingWin()
     let len_buf = len(s:buffers)
     let opts = {'relative': 'editor',
                 \ 'row': 0,
@@ -83,15 +98,15 @@ function! OpenFloatingWin()
     endfor
 endfunction
 
-function! SwitchBuffer()
+function! s:SwitchBuffer()
     if bufnr("$") == 1
         echo "You only have this buffer"
         return
     endif
 
     let s:current_buffer = nvim_get_current_buf()
-    call GetBufferList()
-    call OpenFloatingWin()
+    call s:GetBufferList()
+    call s:OpenFloatingWin()
 endfunction
 
-command! SwitchBuffer :call SwitchBuffer()
+command! SwitchBuffer :call s:SwitchBuffer()

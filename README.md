@@ -1,6 +1,6 @@
 # Nvim-Switch-Buffer
 
-Nvim-Switch-Buffer is a plugin to quickly switch beetween open buffers in neovim.\
+Nvim-Switch-Buffer is a plugin to quickly switch between open buffers in neovim.\
 It uses the floating window feature of neovim
 
 Example: \
@@ -20,10 +20,12 @@ git clone https://github.com/Yohannfra/Nvim-Switch-Buffer/ ~/.vim/plugin/
 
 ## Configuration
 
-Just add this line to your init.vim
+Just add these lines to your init.vim
 ```vim
 " Feel free to map the shortcut you want
 nnoremap S :SwitchBuffer <cr>
+
+set switchbuf=usetab
 ```
 
 ## How to use
