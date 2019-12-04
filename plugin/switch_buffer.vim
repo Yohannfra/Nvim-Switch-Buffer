@@ -59,7 +59,7 @@ function! CloseBuffer()
     let index = keys(s:buffers)[getpos('.')[1] - 1]
 
     if len(s:buffers) > 1 && index != s:current_buffer
-        execute ":bd " . index . " | :q | :call SwitchBuffer()"
+        execute ":bd " . index . " | :q | :call s:SwitchBuffer()"
     else
         echo "You can't close your last or actual buffer"
     endif
