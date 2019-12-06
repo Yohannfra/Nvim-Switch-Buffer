@@ -89,9 +89,12 @@ function! switch_buffer#SwitchBuffer()
         echo "You only have this buffer"
         return
     endif
-
     let s:current_buffer = nvim_get_current_buf()
     call s:GetBufferList()
+    if len(s:buffers) == 1
+         echo "You only have this buffer"
+        return
+    endif
     call s:OpenFloatingWin()
 endfunction
 
