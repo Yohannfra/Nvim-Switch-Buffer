@@ -2,7 +2,7 @@
 " Assouline Yohann
 " November 2019
 
-if exists('g:switch_buffer_loadded')
+if exists('g:switch_buffer_loadded') || !has("nvim")
     finish
 endif
 
