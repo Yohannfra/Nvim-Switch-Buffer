@@ -29,8 +29,8 @@ set switchbuf=usetab
 ```
 
 You can also hide the buffer numbers with
-```
-    let g:switch_buffer_hide_numbers = 1
+```vim
+let g:switch_buffer_hide_numbers = 1
 ```
 
 ## How to use
@@ -40,6 +40,7 @@ You can also hide the buffer numbers with
 - Press s to open the buffer in a horizontal split
 - Press v to open the buffer in a vertical split
 - Press t to open the buffer in a new tab
+- Press dd to close a buffer (you can't close the current buffer)
 - Press S or :q to close the window
 
 ## License
