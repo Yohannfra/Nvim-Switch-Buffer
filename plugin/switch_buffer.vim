@@ -15,6 +15,7 @@ let g:switch_buffer_shortcuts = {
 \    "<space>" : ":call OpenBuffer('n')",
 \    "v" : ":call OpenBuffer('v')",
 \    "s" : ":call OpenBuffer('s')",
+\    "t" : ":call OpenBuffer('t')",
 \    "dd" : ":call CloseBuffer()"
 \}
 

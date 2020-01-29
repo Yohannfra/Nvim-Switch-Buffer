@@ -34,6 +34,7 @@ set switchbuf=usetab
 - Press Enter or Space to open the buffer
 - Press s to open the buffer in a horizontal split
 - Press v to open the buffer in a vertical split
+- Press t to open the buffer in a new tab
 - Press S or :q to close the window
 
 ## License

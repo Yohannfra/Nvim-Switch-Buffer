@@ -38,6 +38,8 @@ function! OpenBuffer(pos)
         execute ":vertical sb " . index
     elseif a:pos ==# 's'
         execute ":sb " . index
+    elseif a:pos ==# 't'
+        execute ":tabnew | b " . index
     endif
 endfunction
 
