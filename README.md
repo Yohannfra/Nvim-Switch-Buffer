@@ -28,6 +28,11 @@ nnoremap S :SwitchBuffer <cr>
 set switchbuf=usetab
 ```
 
+You can also hide the buffer numbers with
+```
+    let g:switch_buffer_hide_numbers = 1
+```
+
 ## How to use
 
 - Navigate in the window using j/k or Up/Down

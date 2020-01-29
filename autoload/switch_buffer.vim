@@ -53,6 +53,21 @@ function! CloseBuffer()
     endif
 endfunction
 
+function! s:DisplayBufferList(buf)
+    let i = 1
+    for key in keys(s:buffers)
+        let line = s:buffers[key]
+        if key == s:current_buffer
+            let line = line . "\t\t<=="
+        endif
+        if !g:switch_buffer_hide_numbers
+            let line = "[" . key . "]  " . line
+        endif
+        call setbufline(a:buf, i, line)
+        let i += 1
+     endfor
+endfunction
+
 function! s:OpenFloatingWin()
     let len_buf = len(s:buffers)
     let opts = {'relative': 'editor',
@@ -65,17 +80,7 @@ function! s:OpenFloatingWin()
     let buf = nvim_create_buf(v:false, v:true)
     let win = nvim_open_win(buf, v:true, opts)
 
-    let i = 1
-    for key in keys(s:buffers)
-        if key == s:current_buffer
-            call setbufline(buf, i, "[" . key . "]  " .
-                        \s:buffers[key] . "\t\t<==")
-        else
-            call setbufline(buf, i, "[" . key . "]  " . s:buffers[key])
-        endif
-        let i += 1
-     endfor
-
+    call s:DisplayBufferList(buf)
      setlocal buftype=nofile nobuflisted nomodifiable bufhidden=hide
                 \ nonumber cursorline cc=0
 
@@ -99,4 +104,3 @@ function! switch_buffer#SwitchBuffer()
     endif
     call s:OpenFloatingWin()
 endfunction
-
