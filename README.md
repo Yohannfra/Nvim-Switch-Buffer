@@ -6,6 +6,12 @@ It uses the floating window feature of neovim
 Example: \
 ![alt text](.github/demo.gif "Utilisation example")
 
+## Disclaimer
+This project is stable and functional but it was mainly made to experiment vimscript and neovim API.\
+I used it for a while but then i discovered the ```:Window``` command of [FZF vim](https://github.com/junegunn/fzf.vim#command-local-options) that I find much better and pleasant to use.\
+Even if I don't use it I'll still maintain this project, if you're facing a bug just open an issue on Github.
+
+
 ## Installation
 
 ### Using Plug
